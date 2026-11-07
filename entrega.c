@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
   /* Check command line parameters */
   if ( (argc != 3) || ((n = atoi(argv[1])) <= 0) || ((bs = atoi(argv[2])) <= 0) || ((n % bs) != 0))
   {
-	printf("\nError en los parámetros. Usage: ./%s N BS (N debe ser multiplo de BS)\n", argv[0]);
+	printf("\nError en los parÃ¡metros. Usage: ./%s N BS (N debe ser multiplo de BS)\n", argv[0]);
 	exit(1);
   }
 
@@ -243,9 +243,9 @@ void blkmul(double *ablk, double *bblk, double *cblk, int n, int bs)
 	  inj=in+j;
 	  jn = j * n;
       jnk = jn + k;
-	  aux += ablk[ink] * bblk[jnk];
+	   cblk[inj] += ablk[ink] * bblk[jnk];
 	  }
-	  cblk[inj] += aux;
+	 
 	}
   }
 }
