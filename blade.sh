@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=hostname_test       # Nombre del trabajo
-#SBATCH --partition=Blade              # Partición del clúster (ajústalo a la que quieras usar)
+#SBATCH --partition=cpu              # Partición del clúster (ajústalo a la que quieras usar)
 #SBATCH --nodes=1                      # Número de nodos
 #SBATCH --ntasks=1                     # Una única tarea
 #SBATCH --cpus-per-task=1              # Un solo CPU para la tarea

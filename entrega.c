@@ -22,7 +22,7 @@ void initvalmat(double *mat, int n, double val, int transpose);
 void matmulblks(double *a, double *b, double *c, int n, int bs);
 
 /* Multiply (block)submatrices */
-void blkmul(double *ablk, double *bblk, double *cblk, int n, int bs);
+void blkmul(  const double * restrict ablk,const double * restrict bblk,double * restrict cblk,int n,int bs);
 
 /* Time in seconds from some point in the past */
 double dwalltime();
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 		}
 	  }
 
-  timetick = dwalltime();
+  timetick = get_time();
   //start = get_time();
  for (i = 0; i < (n*n); i++) {
     double va = a[i];
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
 	  aux2[i]=total*aux2[i];
   }
 //  end = get_time();
-  double workTime = dwalltime() - timetick;
+  double workTime = get_time() - timetick;
  // double tiempo = end - start;
  /* Check results (just in case...) */
   for (i = 0; i < n; i++)
@@ -227,29 +227,30 @@ void matmulblks(double *a, double *b, double *c, int n, int bs)
 /*****************************************************************/
 
 /* Multiply (block)submatrices */
-void blkmul(double *ablk, double *bblk, double *cblk, int n, int bs)
-{
-  int i, j, k ,in,jn,inj,ink,jnk;
-  double aux;
-  for (i = 0; i < bs; i++)
-  {
-	in = i * n;
-	for  (k = 0; k < bs; k++)
-	  {
-		  ink= in + k;
-	for (j = 0; j < bs; j++)
-	{
-	  aux = 0;
-	  inj=in+j;
-	  jn = j * n;
-      jnk = jn + k;
-	   cblk[inj] += ablk[ink] * bblk[jnk];
-	  }
-	 
-	}
-  }
-}
 
+
+
+
+
+
+
+void blkmul(  const double * restrict ablk,const double * restrict bblk,double * restrict cblk,int n,int bs)
+{
+   int i,j,k,in,jn;
+   double aik;
+    for (i = 0; i < bs; i++) {
+        in = i * n;
+
+        for ( k = 0; k < bs; k++) {
+            aik = ablk[in + k];
+            jn = k * n;
+
+            for ( j = 0; j < bs; j++) {
+                cblk[in + j] += aik * bblk[jn + j];
+            }
+        }
+    }
+}
 /*****************************************************************/
 
 #include <stdio.h>
@@ -259,6 +260,7 @@ double dwalltime()
 {
 	double sec;
 	struct timeval tv;
+
 
 	gettimeofday(&tv,NULL);
 	sec = tv.tv_sec + tv.tv_usec/1000000.0;
